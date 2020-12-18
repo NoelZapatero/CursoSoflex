@@ -126,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "curso-soflex"
+  "defaultProject": "curso-soflex",
+  "cli": {
+    "analytics": false
+  }
 }

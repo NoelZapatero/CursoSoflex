@@ -21,7 +21,7 @@ class G
         $time = time();
         $token = array(
             'iat' => $time, // Tiempo que inició el token
-            'exp' => $time + 60*60*24,// (60*60*24), // Tiempo que expirará el token (+24 horas)
+            'exp' => $time + 60*60,// + 60*60*24,// (60*60*24), // Tiempo que expirará el token (+24 horas)
             'data' => $data
         );
 

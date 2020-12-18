@@ -11,24 +11,28 @@ export class ConfigService {
 
   api = "/curso-soflex_api/index.php/";
   server = '';
-  user = JSON.parse(localStorage.getItem("Authorization")!);
-  httpOptions!: { headers: HttpHeaders; };
+  user: any = {};
 
   constructor(private http: HttpClient) {
     this.server = 'http://localhost:8080' + this.api
+  }
 
+  getHeaders(){
+    this.user = JSON.parse(localStorage.getItem("Authorization")!);
+    let httpOptions = {};
     if(this.user){
-      this.httpOptions = {
+      httpOptions = {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
           'Authorization': this.user.token
         })
       };
     }
+    return httpOptions;
   }
 
   get(url: string){
-    return this.http.get(this.server + url, this.httpOptions).pipe(catchError(this.handleError));
+    return this.http.get(this.server + url, this.getHeaders()).pipe(catchError(this.handleError));
   }
 
   getById(url: string, id: number){
