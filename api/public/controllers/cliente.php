@@ -1,10 +1,7 @@
 <?php
 $app->get('/cliente', function ($request, $response, $args) {
-    $token = G::Autenticar($request);
+    $token = G::Autenticar($request, "PEDIDOS_VER");
 
-    if(!$token){
-        die;
-    };
 
     $db = SQLSRV::connect();
     $stmt = sqlsrv_query($db,"SELECT clienId

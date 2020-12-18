@@ -8,8 +8,17 @@
     
         if($data["user"] == "admin" && $data["pass"] == "admin"){
             $res["user"] = $data["user"];
-            $res["id"] = 99;
-            $res["token"] = G::CrearToken($data);
+            
+            $idusuario = 99;
+            $res["id"] = $idusuario;
+
+            $token = [];
+            $token["idUsuario"] = $idusuario;
+            $token["usuario"] = "Juan Perez";
+            $token["permisos"] = ["PEDIDOS_BORRAR"
+                                ,"PEDIDOS_AGREGAR"];
+    
+            $res["token"] = G::CrearToken($token);
         }else{
             $res["user"] = "Error";
             $res["id"] = -1;
