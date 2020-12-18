@@ -14,10 +14,24 @@
 
             $token = [];
             $token["idUsuario"] = $idusuario;
-            $token["usuario"] = "Juan Perez";
-            $token["permisos"] = ["PEDIDOS_BORRAR"
-                                ,"PEDIDOS_AGREGAR"];
+            $token["usuario"] = "Usuario ADMIN";
+            $token["permisos"] = ["ADMIN_VER"
+                                 ,"ADMIN_AGREGAR"
+                                 ,"ADMIN_MODIFICAR"
+                                 ,"ADMIN_BORRAR"];
     
+            $res["token"] = G::CrearToken($token);
+        }elseif($data["user"] == "user" && $data["pass"] == "user"){
+            $res["user"] = $data["user"];
+            
+            $idusuario = 11;
+            $res["id"] = $idusuario;
+
+            $token = [];
+            $token["idUsuario"] = $idusuario;
+            $token["usuario"] = "Juan Perez";
+            $token["permisos"] = ["ADMIN_VER"];
+            
             $res["token"] = G::CrearToken($token);
         }else{
             $res["user"] = "Error";

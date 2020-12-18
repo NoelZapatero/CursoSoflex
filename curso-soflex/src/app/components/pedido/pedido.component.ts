@@ -18,6 +18,7 @@ export class PedidoComponent implements OnInit {
 
   formularioOpen = false;
   detalleOpen = false;
+  noAutorizado = false;
   minDate: Date = new Date()
   pedidos: Pedido[] = [];
   clientes: Cliente[] = [];
@@ -75,6 +76,7 @@ export class PedidoComponent implements OnInit {
   }
 
   editar(pedido: Pedido){
+    this.noAutorizado = false;
     this.form.setValue(pedido)
     this.formularioOpen = true;
     this.detalleOpen = true;
@@ -83,6 +85,7 @@ export class PedidoComponent implements OnInit {
   }
 
   eliminar(pedido: Pedido){
+    this.noAutorizado = false;
     const dialogRef = this.dialog.open(ConfirmacionComponent)
 
     dialogRef.afterClosed().subscribe(result => {
@@ -91,6 +94,10 @@ export class PedidoComponent implements OnInit {
           pedido.pediBorrado = true;
           this.pedidos = this.pedidos.filter(pedi => pedi != pedido);
           this.actualizarTabla();
+        }, (err) =>{
+          if(err.status == 401){
+            this.noAutorizado = true;
+          }
         })
       }
     });
@@ -117,6 +124,10 @@ export class PedidoComponent implements OnInit {
         this.index = this.pedidos.findIndex(elem => elem === copy)
 
         this.detalleOpen = true
+      }, (err) =>{
+        if(err.status == 401){
+          this.noAutorizado = true;
+        }
       })
     }else{
       this.pedidoService.put(copy.pediId, copy).subscribe((data:any)=>{
@@ -124,7 +135,11 @@ export class PedidoComponent implements OnInit {
         this.actualizarTabla();
 
         this.formularioOpen = false;
-    })
+      }, (err) =>{
+        if(err.status == 401){
+          this.noAutorizado = true;
+        }
+      })
     }
   }
 

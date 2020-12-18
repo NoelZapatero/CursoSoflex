@@ -15,6 +15,7 @@ import { ConfirmacionComponent } from '../shared/confirmacion';
 export class ClienteComponent implements OnInit {
 
   formularioOpen = false;
+  noAutorizado = false;
   clientes: Cliente[] = [];
   
   columnas: string[] = ['id','nombre','direccion','fecha','acciones'];
@@ -60,12 +61,14 @@ export class ClienteComponent implements OnInit {
   }
 
   editar(cliente: Cliente){
+    this.noAutorizado = false;
     this.form.setValue(cliente)
     this.formularioOpen = true;
     this.index = this.clientes.findIndex(elem => elem === cliente)
   }
 
   eliminar(cliente: Cliente){
+    this.noAutorizado = false;
     const dialogRef = this.dialog.open(ConfirmacionComponent)
 
     dialogRef.afterClosed().subscribe(result => {
@@ -74,6 +77,10 @@ export class ClienteComponent implements OnInit {
           cliente.clienBorrado = true;
           this.clientes = this.clientes.filter(cli => cli != cliente);
           this.actualizarTabla();
+        },(err) =>{
+          if(err.status == 401){
+            this.noAutorizado = true;
+          }
         })
       }
     });
@@ -95,11 +102,20 @@ export class ClienteComponent implements OnInit {
 
         this.clientes.push(copy);
         this.actualizarTabla();
+      },(err) =>{
+        if(err.status == 401){
+          this.noAutorizado = true;
+        }
       })
     }else{
       this.clienteService.put(copy.clienId, copy).subscribe((data:any)=>{
         this.clientes[this.index] = copy;
         this.actualizarTabla();
+      }, (err) =>{
+        console.log(err)
+        if(err.status == 401){
+          this.noAutorizado = true;
+        }
       })
     }
   }

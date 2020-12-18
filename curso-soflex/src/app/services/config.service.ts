@@ -36,22 +36,22 @@ export class ConfigService {
   }
 
   getById(url: string, id: number){
-    return this.http.get(this.server + url + '/' + id);
+    return this.http.get(this.server + url + '/' + id, this.getHeaders()).pipe(catchError(this.handleError))
   }
 
   post(url:string, data: any){
-    return this.http.post(this.server + url, data)
+    return this.http.post(this.server + url, data, this.getHeaders()).pipe(catchError(this.handleError))
   }
 
   put(url:string, id:number, data:any){
-    return this.http.put(this.server + url + '/' + id, data)
+    return this.http.put(this.server + url + '/' + id, data, this.getHeaders()).pipe(catchError(this.handleError))
   }
 
   delete(url:string, id:number){
-    return this.http.delete(this.server + url + '/' + id)
+    return this.http.delete(this.server + url + '/' + id, this.getHeaders()).pipe(catchError(this.handleError))
   }
 
   public handleError(err: Response){
-    return throwError(err.toString());
+    return throwError(err);
   }
 }

@@ -1,5 +1,6 @@
 <?php
 $app->get('/pedido', function ($request, $response, $args) {
+    $token = G::Autenticar($request, "ADMIN_VER");
 
     $db = SQLSRV::connect();
     $stmt = sqlsrv_query($db,"SELECT pediId
@@ -32,6 +33,7 @@ $app->get('/pedido', function ($request, $response, $args) {
 });
 
 $app->delete('/pedido/{id}', function ($request, $response, $args) {
+    $token = G::Autenticar($request, "ADMIN_BORRAR");
 
     $id = $args['id'];
 
@@ -60,6 +62,7 @@ $app->delete('/pedido/{id}', function ($request, $response, $args) {
 });
 
 $app->put('/pedido/{id}', function ($request, $response, $args) {
+    $token = G::Autenticar($request, "ADMIN_MODIFICAR");
 
     $id = $args['id'];
     $input = file_get_contents("php://input");
@@ -100,6 +103,7 @@ $app->put('/pedido/{id}', function ($request, $response, $args) {
 });
 
 $app->post('/pedido', function ($request, $response, $args) {
+    $token = G::Autenticar($request, "ADMIN_AGREGAR");
 
     $input = file_get_contents("php://input");
     $data = json_decode($input, true);

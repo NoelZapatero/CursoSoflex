@@ -16,6 +16,7 @@ export class ProductoComponent implements OnInit {
 
   formularioOpen = false;
   productos: Producto[] = [];
+  noAutorizado = false;
   
   columnas: string[] = ['id','descripcion','precio','fecha','acciones'];
   dataSource = new MatTableDataSource<Producto>();
@@ -60,12 +61,14 @@ export class ProductoComponent implements OnInit {
   }
 
   editar(Producto: Producto){
+    this.noAutorizado = false;
     this.form.setValue(Producto)
     this.formularioOpen = true;
     this.index = this.productos.findIndex(elem => elem === Producto)
   }
 
   eliminar(Producto: Producto){
+    this.noAutorizado = false;
     const dialogRef = this.dialog.open(ConfirmacionComponent)
 
     dialogRef.afterClosed().subscribe(result => {
@@ -74,6 +77,10 @@ export class ProductoComponent implements OnInit {
           Producto.prodBorrado = true;
           this.productos = this.productos.filter(cli => cli != Producto);
           this.actualizarTabla();
+        }, (err) =>{
+          if(err.status == 401){
+            this.noAutorizado = true;
+          }
         })
       }
     });
@@ -95,11 +102,19 @@ export class ProductoComponent implements OnInit {
 
         this.productos.push(copy);
         this.actualizarTabla();
+      }, (err) =>{
+        if(err.status == 401){
+          this.noAutorizado = true;
+        }
       })
     }else{
       this.productoService.put(copy.prodId, copy).subscribe((data:any)=>{
         this.productos[this.index] = copy;
         this.actualizarTabla();
+      }, (err) =>{
+        if(err.status == 401){
+          this.noAutorizado = true;
+        }
       })
     }
   }

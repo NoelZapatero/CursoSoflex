@@ -22,6 +22,7 @@ export class DetallePedidoComponent implements OnInit {
   @Output() update = new EventEmitter<boolean>();
 
   detallePedido = false;
+  noAutorizado = false;
   detalles: DetallePedido[] = [];
   productos: Producto[] = [];
   precioSugerido = 0;
@@ -83,12 +84,14 @@ export class DetallePedidoComponent implements OnInit {
   }
 
   editar(detalle: DetallePedido){
+    this.noAutorizado = false;
     this.formDetalle.setValue(detalle)
     this.detallePedido = true;
     this.index = this.detalles.findIndex(elem => elem === detalle)
   }
 
   eliminar(detalle: DetallePedido){
+    this.noAutorizado = false;
     const dialogRef = this.dialog.open(ConfirmacionComponent)
 
     dialogRef.afterClosed().subscribe(result => {
@@ -97,6 +100,10 @@ export class DetallePedidoComponent implements OnInit {
           detalle.detaBorrado = true;
           this.detalles = this.detalles.filter(deta => deta != detalle);
           this.actualizarTabla();
+        },(err) =>{
+          if(err.status == 401){
+            this.noAutorizado = true;
+          }
         })
       }
     });
@@ -120,11 +127,19 @@ export class DetallePedidoComponent implements OnInit {
 
         this.detalles.push(copy);
         this.actualizarTabla();
+      },(err) =>{
+        if(err.status == 401){
+          this.noAutorizado = true;
+        }
       })
     }else{
       this.detallePedidoService.put(copy.detaId, copy).subscribe(()=>{
         this.detalles[this.index] = copy;
         this.actualizarTabla();
+      },(err) =>{
+        if(err.status == 401){
+          this.noAutorizado = true;
+        }
       })
     }
   }

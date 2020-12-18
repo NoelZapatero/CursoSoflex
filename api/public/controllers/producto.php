@@ -1,5 +1,6 @@
 <?php
 $app->get('/producto', function ($request, $response, $args) {
+    $token = G::Autenticar($request, "ADMIN_VER");
 
     $db = SQLSRV::connect();
     $stmt = sqlsrv_query($db,"SELECT prodId
@@ -30,6 +31,7 @@ $app->get('/producto', function ($request, $response, $args) {
 });
 
 $app->delete('/producto/{id}', function ($request, $response, $args) {
+    $token = G::Autenticar($request, "ADMIN_BORRAR");
 
     $id = $args['id'];
 
@@ -58,6 +60,7 @@ $app->delete('/producto/{id}', function ($request, $response, $args) {
 });
 
 $app->put('/producto/{id}', function ($request, $response, $args) {
+    $token = G::Autenticar($request, "ADMIN_MODIFICAR");
 
     $id = $args['id'];
     $input = file_get_contents("php://input");
@@ -98,6 +101,7 @@ $app->put('/producto/{id}', function ($request, $response, $args) {
 });
 
 $app->post('/producto', function ($request, $response, $args) {
+    $token = G::Autenticar($request, "ADMIN_AGREGAR");
 
     $input = file_get_contents("php://input");
     $data = json_decode($input, true);

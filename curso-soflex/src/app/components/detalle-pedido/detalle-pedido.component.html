@@ -1,4 +1,5 @@
 <span *ngIf="indexPedido == -1" style="text-align: center">Pedido Guardado. Carga los productos deseados para el pedido</span>
+<mat-error *ngIf="noAutorizado" style="text-align: center; margin: 15px">No estas autorizado a realizar esa operacion</mat-error>
 
 <div [hidden]="detallePedido" class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource">
@@ -41,7 +42,7 @@
 
     <mat-toolbar>
         <mat-toolbar-row>
-            <button mat-raised-button (click)="agregar()" class="saveButton">Agregar Detalle</button>
+            <button [disabled]="noAutorizado" mat-raised-button (click)="agregar()" class="saveButton">Agregar Detalle</button>
             <span class="spacer"></span>
             <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
         </mat-toolbar-row>
