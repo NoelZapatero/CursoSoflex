@@ -16,8 +16,7 @@ export class LoginComponent implements OnInit {
   form!: FormGroup;
 
   constructor(private fb:FormBuilder, 
-              private authService: AuthService,
-              private router: Router) {}
+              private authService: AuthService) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -35,7 +34,6 @@ export class LoginComponent implements OnInit {
         if(authResult.id > 0){
             localStorage.setItem('Authorization', JSON.stringify(authResult));
             this.isLogged.emit(true)
-            this.router.navigateByUrl('/');
         }else{
           this.errorLogin = true;
         }

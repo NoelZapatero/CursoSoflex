@@ -30,5 +30,6 @@ export class AppComponent {
 
   handleLogin(log: boolean){
     this.isLogged = log;
+    this.router.navigateByUrl('/');
   }
 }
